@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pregão Leitor de Edital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@500;700;800;900&family=Red+Hat+Text:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday work tool for a small-business owner: confident, warm, exact
+   IDEA an edital that comes back from the Pregão desk with a dial, a rubber stamp and a route to the contract
+   PICTURE the result sheet (gauge + stamp) rising out of the blue band; below it, the WhatsApp alert and the first-bid route
+   COLOUR oxford blue band and route line, white paper sheets, magenta accent; green/amber/red only for verdicts
+   TYPE Red Hat Display 800-900 for titles and figures, Red Hat Text for reading
+   LAYOUT laptop: band, then input left and sheet right overlapping the band; chat + route; history; tests. Phone: title, sheet, input */
+:root{color-scheme:light dark;--bg:light-dark(#eef1f8,#060d22);--ink:light-dark(#101a35,#e8ecf7);--mut:light-dark(#4a5677,#a8b3d1);--band:#0b1f4b;--band2:#132c66;--panel:light-dark(#ffffff,#0f1b3d);--soft:light-dark(#f3f5fb,#16244d);--line:light-dark(#dbe0ec,#26345e);--acc:light-dark(#e0115f,#ff4f8b);--ok:light-dark(#0f7a57,#3fcf8e);--warn:light-dark(#a35d00,#ffb84d);--bad:light-dark(#c4162a,#ff6b7a);--off:light-dark(#5b6478,#8e98b3);--shadow:0 1px 0 light-dark(#d5dbea,#1c2a55),0 18px 40px -24px light-dark(rgba(11,31,75,.45),rgba(0,0,0,.8));--chat:light-dark(#efeae2,#0b141a);--bot:light-dark(#ffffff,#1f2c34);--me:light-dark(#d9fdd3,#005c4b)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-padding-top:24px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Red Hat Text",system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Red Hat Display",system-ui,sans-serif;letter-spacing:-.02em;line-height:1.08;margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:max(16px,4vw)}
+.top{background:radial-gradient(circle at 85% 0%,#1d3f8f 0,transparent 55%),radial-gradient(rgba(255,255,255,.09) 1px,transparent 1.2px) 0 0/18px 18px,var(--band);color:#fff;padding-block:clamp(26px,4vw,44px) 96px}
+.top .wrap{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 40px;align-items:end}
+.brand{display:flex;align-items:center;gap:16px}
+.mark{width:clamp(52px,6vw,68px);height:auto;flex:none}
+.top h1{font-size:clamp(44px,7vw,72px);font-weight:900}
+.top p{margin:10px 0 0;color:#c9d6f5;max-width:50ch;font-size:17px}
+.flow{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.flow li{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:999px;padding:8px 14px;font-weight:500;font-size:15px;white-space:nowrap}
+.flow li.hl{background:var(--acc);border-color:var(--acc)}
+.flow .arr{background:none;border:0;padding:0;color:#7f95c9}
+.work{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:24px;margin-top:-72px;align-items:start}
+.col{display:grid;gap:20px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;box-shadow:var(--shadow)}
+.panel h2{font-size:24px;margin-bottom:6px}
+.muted{color:var(--mut);margin:0 0 14px;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chips button{border-radius:999px;background:var(--soft)}
+.chips button.on{background:var(--band);border-color:var(--band);color:#fff}
+button,.file{font:inherit;font-weight:500;min-height:44px;border-radius:10px;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:8px 16px;cursor:pointer;transition:border-color .15s,transform .15s}
+button:hover,.file:hover{border-color:var(--acc)}
+button:active{transform:translateY(1px)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,summary:focus-visible,.file:focus-within{outline:3px solid var(--acc);outline-offset:2px}
+.primary{background:var(--acc);border-color:var(--acc);color:#fff;font-weight:700;box-shadow:0 8px 20px -10px var(--acc)}
+.primary:hover{filter:brightness(1.08)}
+textarea,input[type=text],select{font:inherit;font-size:16px;width:100%;color:var(--ink);background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+#edital{min-height:250px;resize:vertical;line-height:1.55;font-size:15px;background:repeating-linear-gradient(var(--soft) 0 23px,var(--line) 23px 24px);background-attachment:local;padding-top:12px}
+.lab{display:block;font-weight:700;font-size:14px;margin-bottom:6px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.row .primary{margin-left:auto}
+.file{display:inline-flex;align-items:center;position:relative}
+.file input{position:absolute;opacity:0;width:1px;height:1px}
+.status{min-height:22px;margin:10px 0 0;font-size:14px;color:var(--mut)}
+.checks{display:grid;grid-template-columns:repeat(auto-fit,minmax(15em,1fr));gap:6px}
+.checks label{display:flex;gap:10px;align-items:center;min-height:44px;cursor:pointer;padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:var(--soft);font-size:15px}
+.checks label:has(input:checked){border-color:color-mix(in srgb,var(--ok) 55%,transparent);background:color-mix(in srgb,var(--ok) 10%,var(--panel))}
+.checks input{width:20px;height:20px;accent-color:var(--ok);flex:none}
+.sheet{position:relative;background:var(--panel);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;border:1px solid var(--line)}
+.strip{background:var(--band);color:#fff;padding:12px 24px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:14px;font-weight:500}
+.strip span:last-child{color:#9fb3e3}
+.paper{padding:clamp(20px,2.6vw,30px)}
+.org{margin:0 0 4px;color:var(--mut);font-size:14px;font-weight:700}
+.obj{font-size:clamp(21px,2.3vw,27px);text-wrap:balance}
+.stamp{display:inline-block;margin:6px 0 14px 4px;font:900 19px/1.1 "Red Hat Display",sans-serif;padding:12px 14px;border:4px double currentColor;border-radius:8px;transform:rotate(-8deg);text-align:center;width:9.5em;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.7'/%3E%3C/filter%3E%3Crect width='160' height='80' filter='url(%23n)'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.7'/%3E%3C/filter%3E%3Crect width='160' height='80' filter='url(%23n)'/%3E%3C/svg%3E");background:color-mix(in srgb,currentColor 7%,transparent)}
+.stamp.pop{animation:pop .4s cubic-bezier(.2,1.6,.4,1)}
+@keyframes pop{from{transform:rotate(-8deg) scale(1.8);opacity:0}to{transform:rotate(-8deg) scale(1);opacity:1}}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}.off{color:var(--off)}
+.meter{display:grid;grid-template-columns:minmax(0,250px) minmax(0,1fr);gap:8px 24px;align-items:center;margin:16px 0 6px}
+.gauge{width:100%;height:auto;display:block}
+.gauge .trk{stroke:var(--soft)}
+.gauge .arc{stroke:currentColor;transition:stroke-dashoffset .7s ease}
+.gauge text{fill:currentColor;font-family:"Red Hat Display",sans-serif}
+.gauge .sub{fill:var(--mut);font-size:13px;font-weight:500}
+.gauge .tk{fill:var(--mut);font-size:11px}
+.verd{font:800 clamp(22px,2.4vw,28px)/1.1 "Red Hat Display",sans-serif;margin:0 0 6px}
+.why{margin:0;color:var(--mut);font-size:15px}
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0 4px}
+.facts div{background:var(--soft);border-radius:12px;padding:10px 12px}
+.facts dt{font-size:13px;color:var(--mut)}
+.facts dd{margin:2px 0 0;font-weight:700;font-family:"Red Hat Display",sans-serif;font-size:17px}
+.nw{white-space:nowrap}
+.sec{font-size:18px;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+.cnt{font:700 13px/1 "Red Hat Text",sans-serif;padding:4px 8px;border-radius:999px;background:var(--soft);color:var(--mut)}
+.items{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.it{border:1px solid var(--line);border-left:5px solid currentColor;background:var(--panel);border-radius:10px}
+.it summary{cursor:pointer;padding:10px 12px;list-style:none;color:var(--ink);display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px}
+.it summary::-webkit-details-marker{display:none}
+.it summary b{grid-column:1}
+.it summary span{grid-column:1;color:var(--mut);font-size:15px}
+.pill{grid-column:2;grid-row:1/3;align-self:center;font:700 12px/1 "Red Hat Text",sans-serif;padding:5px 9px;border-radius:999px;color:currentColor;background:color-mix(in srgb,currentColor 12%,transparent);white-space:nowrap}
+.it summary em{grid-column:1;font-style:normal;font-size:13px;color:var(--acc);font-weight:700}
+.it[open] summary em{color:var(--mut)}
+.it blockquote{margin:0 12px 12px;padding:10px 14px;background:var(--soft);border-radius:8px;font-size:14px;color:var(--ink);border-left:3px solid var(--acc)}
+.plain{color:var(--ok)}
+.empty{color:var(--mut);margin:0;font-size:15px}
+.err{color:var(--bad);font-weight:700;padding:24px}
+details.dates summary{cursor:pointer;font-weight:700;min-height:44px;display:flex;align-items:center;color:var(--acc)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:13px;color:var(--mut);font-weight:500}
+td.r,th.r{text-align:right}
+.scroll{overflow-x:auto}
+.block{padding-block:40px 4px}
+.head{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:end;justify-content:space-between;margin-bottom:16px}
+.head h2{font-size:clamp(28px,3.4vw,38px)}
+.head p{margin:6px 0 0;color:var(--mut);max-width:60ch}
+.acts{display:flex;flex-wrap:wrap;gap:8px}
+.duo{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:24px;align-items:stretch}
+.phone{background:#111;border-radius:34px;padding:10px;box-shadow:var(--shadow)}
+.screen{background:var(--chat);border-radius:26px;overflow:hidden;display:flex;flex-direction:column;height:100%;min-height:520px}
+.chathd{background:#075e54;color:#fff;display:flex;align-items:center;gap:10px;padding:14px 16px}
+.av{width:38px;height:38px;border-radius:50%;background:var(--acc);display:grid;place-items:center;font:900 18px "Red Hat Display",sans-serif;flex:none}
+.chathd b{display:block;line-height:1.2}
+.chathd small{color:#c8e6df}
+.msgs{flex:1;padding:14px 12px;display:flex;flex-direction:column;gap:8px;overflow-y:auto;max-height:470px;background-image:radial-gradient(color-mix(in srgb,var(--ink) 6%,transparent) 1px,transparent 1.2px);background-size:16px 16px}
+.day{align-self:center;background:var(--bot);color:var(--mut);font-size:12px;padding:4px 10px;border-radius:8px}
+.bub{max-width:88%;padding:8px 10px 18px;border-radius:10px;font-size:14.5px;line-height:1.45;position:relative;white-space:pre-line;color:var(--ink);box-shadow:0 1px 0 rgba(0,0,0,.12)}
+.bub.b{background:var(--bot);align-self:flex-start;border-top-left-radius:2px}
+.bub.u{background:var(--me);align-self:flex-end;border-top-right-radius:2px}
+.bub time{position:absolute;right:8px;bottom:3px;font-size:11px;color:var(--mut)}
+.bub strong{font-weight:700}
+.qr{display:flex;flex-wrap:wrap;gap:6px;padding:10px 12px;background:var(--bot);border-top:1px solid var(--line)}
+.qr button{flex:1 1 auto;min-height:40px;border-radius:999px;color:#008069;font-weight:700;background:var(--bot);font-size:14px;padding:6px 12px}
+:root[data-theme=dark] .qr button{color:#25d366}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .qr button{color:#25d366}}
+.route{list-style:none;margin:0;padding:0;position:relative}
+.route li{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:4px 14px;padding-bottom:22px;position:relative}
+.route li::before{content:"";position:absolute;left:23px;top:44px;bottom:0;width:6px;background:var(--band);border-radius:3px;opacity:.9}
+.route li:last-child::before{display:none}
+.dot{width:52px;height:52px;border-radius:50%;border:6px solid var(--band);background:var(--panel);display:grid;place-items:center;font:900 18px "Red Hat Display",sans-serif;color:var(--band);position:relative;z-index:1}
+:root[data-theme=dark] .dot{color:#fff}
+.dot.ok{border-color:var(--ok);color:var(--ok)}.dot.warn{border-color:var(--warn);color:var(--warn)}.dot.bad{border-color:var(--bad);color:var(--bad)}
+.route h3{font-size:19px;margin-top:4px}
+.route p{margin:2px 0 0;color:var(--mut);font-size:15px}
+.route .pill{grid-column:3;grid-row:1;align-self:start;margin-top:6px}
+.vpill{display:inline-block;font-weight:700;font-size:14px;padding:4px 10px;border-radius:999px;background:color-mix(in srgb,currentColor 12%,transparent);white-space:nowrap}
+.mini{display:flex;align-items:center;gap:8px;white-space:nowrap;font-weight:800;font-family:"Red Hat Display",sans-serif}
+.mini span{display:inline-block;width:64px;height:8px;background:var(--soft);border-radius:4px;overflow:hidden}
+.mini span i{display:block;height:100%;background:currentColor}
+.badge{display:inline-block;font-size:12px;padding:1px 8px;border-radius:10px;background:var(--soft);color:var(--mut);margin-left:6px}
+.x{min-height:36px;padding:4px 10px;font-size:14px}
+.tests{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:24px;align-items:start}
+.fbform{display:grid;gap:14px}
+.fbform label{display:grid;gap:6px;font-weight:500}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(12em,1fr));gap:14px}
+fieldset{border:0;padding:0;margin:0}
+legend{font-weight:500;margin-bottom:6px}
+.rate{display:flex;flex-wrap:wrap;gap:8px}
+.rate label{display:flex!important;align-items:center;justify-content:center;min-width:48px;min-height:44px;border:1px solid var(--line);border-radius:10px;cursor:pointer;font-weight:700;position:relative;background:var(--soft)}
+.rate input{position:absolute;opacity:0}
+.rate label:has(input:checked){background:var(--acc);border-color:var(--acc);color:#fff}
+.rate label:has(input:focus-visible){outline:3px solid var(--acc);outline-offset:2px}
+.dots{display:flex;align-items:center;gap:8px;margin-bottom:12px;font-weight:700}
+.dots i{width:18px;height:18px;border-radius:50%;border:3px solid var(--acc)}
+.dots i.on{background:var(--acc)}
+footer{margin-top:48px;background:var(--band);color:#c9d6f5;font-size:14px;padding-block:26px}
+footer p{margin:4px 0;max-width:92ch}
+@media (prefers-reduced-motion:reduce){.stamp.pop{animation:none}.gauge .arc{transition:none}}
+@media(max-width:900px){.work,.tests,.duo{grid-template-columns:minmax(0,1fr)}.res{order:-1}.top .wrap{grid-template-columns:minmax(0,1fr)}.phone{max-width:400px;width:100%;justify-self:center}}
+@media(max-width:640px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}.meter{grid-template-columns:minmax(0,1fr)}.gauge{max-width:260px;margin:0 auto}.meter>div:last-child{text-align:center}}
+@media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0;text-align:right}.stack td::before{content:attr(data-l);color:var(--mut);text-align:left;flex:none}.stack td:empty{display:none}.route li{grid-template-columns:52px minmax(0,1fr)}.route .pill{grid-column:2;grid-row:auto;justify-self:start;margin-top:4px}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div>
+      <div class="brand">
+        <svg class="mark" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="29" fill="none" stroke="#ff4f8b" stroke-width="4" stroke-dasharray="6 3"/><circle cx="32" cy="32" r="21" fill="#ff4f8b"/><path d="M26 44V20h8.5c5 0 8.5 3.2 8.5 7.8s-3.5 7.8-8.5 7.8H31V44z" fill="#fff"/></svg>
+        <h1>Pregão</h1>
+      </div>
+      <p>Cole o edital e receba, em segundos, o que ele pede, os prazos que importam e se vale a pena disputar.</p>
+    </div>
+    <ol class="flow" aria-label="Como funciona">
+      <li>Cole o edital</li><li class="arr" aria-hidden="true">→</li><li>O Pregão lê por você</li><li class="arr" aria-hidden="true">→</li><li class="hl">Você decide</li>
+    </ol>
+  </div>
+</header>
+
+<main class="wrap work">
+  <section class="col in">
+    <div class="panel" id="entrada">
+      <h2>Edital</h2>
+      <p class="muted">Escolha um exemplo ou cole o texto do edital. No PDF: Ctrl+A, Ctrl+C e cole aqui.</p>
+      <div class="chips" id="presets"></div>
+      <label for="edital" class="lab">Texto do edital</label>
+      <textarea id="edital" spellcheck="false"></textarea>
+      <div class="row">
+        <label class="file">Abrir .txt<input type="file" id="arquivo" accept=".txt,text/plain"></label>
+        <button type="button" id="limparTexto">Limpar</button>
+        <button type="button" class="primary" id="analisar">Analisar e salvar</button>
+      </div>
+      <p class="status" id="status" role="status"></p>
+    </div>
+    <div class="panel">
+      <h2>Seu cofre de documentos</h2>
+      <p class="muted">Marque o que sua empresa já tem em dia. A pontuação muda na hora.</p>
+      <div class="checks" id="cofre"></div>
+    </div>
+  </section>
+  <section class="col res" aria-live="polite">
+    <article class="sheet" id="resultado"></article>
+  </section>
+</main>
+
+<section class="wrap block" id="jornada">
+  <div class="head"><div><h2>Do alerta ao contrato</h2><p>Assim o edital chegaria pelo WhatsApp, e este é o caminho que o modo primeira licitação mostra para quem nunca vendeu ao governo.</p></div></div>
+  <div class="duo">
+    <div class="phone">
+      <div class="screen">
+        <div class="chathd"><div class="av">P</div><div><b>Pregão alertas</b><small>prévia ilustrativa</small></div></div>
+        <div class="msgs" id="msgs"></div>
+        <div class="qr" id="qr"><button type="button" data-q="sim">Quero participar</button><button type="button" data-q="resumo">Ver pontos de atenção</button><button type="button" data-q="nao">Agora não</button></div>
+      </div>
+    </div>
+    <div class="panel">
+      <h2 style="margin-bottom:18px">Modo primeira licitação</h2>
+      <ol class="route" id="route"></ol>
+    </div>
+  </div>
+</section>
+
+<section class="wrap block" id="historico">
+  <div class="head">
+    <div><h2>Histórico de análises</h2><p>Cada clique em “Analisar e salvar” entra aqui.</p></div>
+    <div class="acts">
+      <button type="button" id="copiarHist">Copiar como planilha</button>
+      <button type="button" id="limparHist">Limpar histórico</button>
+    </div>
+  </div>
+  <div class="panel" style="padding:8px 14px">
+    <div class="scroll">
+      <table class="stack" id="hist">
+        <thead><tr><th>Data</th><th>Órgão e objeto</th><th>Modalidade</th><th class="r">Valor</th><th>Pontuação</th><th>Veredito</th><th><span hidden>Ações</span></th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+  <p class="status" id="histStatus" role="status"></p>
+</section>
+
+<section class="wrap block" id="testes">
+  <div class="head"><div><h2>Testes com usuários</h2><p>Peça a cada pessoa que analise um edital sozinha e registre a opinião dela.</p></div></div>
+  <div class="tests">
+    <form class="panel fbform" id="fb">
+      <div class="grid2">
+        <label>Testador<input type="text" id="fbNome" maxlength="40" required placeholder="Ex.: Maria, MEI de limpeza"></label>
+        <label>Perfil<select id="fbPerfil"><option>MEI</option><option>Microempresa</option><option>Empresa de pequeno porte</option><option>Estudante ou outro</option></select></label>
+      </div>
+      <fieldset><legend>O resultado foi útil? (1 a 5)</legend><div class="rate" id="fbNota"></div></fieldset>
+      <fieldset><legend>Entendeu o resultado sem ajuda?</legend><div class="rate"><label><input type="radio" name="fbEnt" value="Sim" required>Sim</label><label><input type="radio" name="fbEnt" value="Não">Não</label></div></fieldset>
+      <label>O que mudaria?<textarea id="fbCom" rows="3" maxlength="400"></textarea></label>
+      <button class="primary" type="submit">Registrar teste</button>
+    </form>
+    <div class="panel">
+      <div class="dots" id="dots"></div>
+      <div class="scroll">
+        <table class="stack" id="fbTab">
+          <thead><tr><th>Testador</th><th>Perfil</th><th class="r">Nota</th><th>Entendeu</th><th>Comentário</th><th><span hidden>Ações</span></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="acts" style="margin-top:12px"><button type="button" id="copiarFb">Copiar resultados dos testes</button></div>
+      <p class="status" id="fbStatus" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>Protótipo acadêmico. A análise lê o texto por regras (palavras-chave e padrões) e não substitui a leitura completa do edital. A decisão de participar é sempre do fornecedor. A conversa no WhatsApp é uma simulação.</p>
+    <p>Referências: Lei 14.133/2021, com valores de 2026 do Decreto 12.807/2025 (dispensa para compras e serviços até R$ 65.492,11), e LC 123/2006, art. 48. Os editais de exemplo são fictícios. Histórico e testes ficam salvos só neste navegador.</p>
+  </div>
+</footer>
+
+<script>
+{
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const DAY=864e5;
+const today=new Date();today.setHours(0,0,0,0);
+const fmtD=d=>d.toLocaleDateString('pt-BR');
+const plus=n=>fmtD(new Date(today.getTime()+n*DAY));
+const brl=v=>v==null?'Não informado':v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const emDias=n=>n<0?'encerrado':n===0?'hoje':`em ${n} dia${n>1?'s':''}`;
+const LIM_DISP=65492.11,LIM_HAB=LIM_DISP/4,LIM_EXCL=80000;
+const W={alto:12,medio:7,baixo:3};
+const SEVC={alto:'bad',medio:'warn',baixo:'off'};
+const SEVL={alto:'Alto',medio:'Médio',baixo:'Baixo'};
+
+const DOCS=[
+{id:'cnpj',label:'Comprovante de inscrição no CNPJ',re:/cnpj|cadastro nacional da pessoa juridica/,w:8,def:1},
+{id:'ato',label:'Ato constitutivo ou CCMEI',re:/ato constitutivo|contrato social|estatuto social|ccmei|condicao de microempreendedor/,w:8,def:1},
+{id:'fed',label:'Certidão federal (Receita e PGFN)',re:/receita federal|divida ativa da uniao|pgfn|tributos federais|fiscal federal|fazendas? federal/,w:10,def:1},
+{id:'fgts',label:'Regularidade do FGTS (CRF)',re:/fgts|\bcrf\b/,w:10,def:1},
+{id:'cndt',label:'Certidão trabalhista (CNDT)',re:/cndt|debitos trabalhistas|justica do trabalho/,w:10,def:1},
+{id:'est',label:'Certidão estadual',re:/fazenda estadual|tributos estaduais|certidao estadual|regularidade estadual|federal, estadual/,w:10,def:0},
+{id:'mun',label:'Certidão municipal',re:/fazenda municipal|tributos municipais|certidao municipal|regularidade municipal|estadual e municipal/,w:10,def:1},
+{id:'fal',label:'Certidão negativa de falência',re:/falencia|recuperacao judicial/,w:8,def:0},
+{id:'atest',label:'Atestado de capacidade técnica',re:/atestados? de capacidade|capacidade tecnica/,w:12,def:0},
+{id:'bal',label:'Balanço patrimonial',re:/balanco patrimonial|demonstracoes contabeis/,w:12,def:0},
+{id:'cons',label:'Registro em conselho (CREA, CAU etc.)',re:/\bcrea\b|\bcau\b|conselho regional|registro profissional/,w:12,def:0},
+{id:'alv',label:'Alvará ou licença sanitária',re:/alvara|licenca sanitaria|vigilancia sanitaria|licenca de funcionamento/,w:8,def:0}
+];
+const MODS=[['pregao eletronico','Pregão eletrônico'],['pregao presencial','Pregão presencial'],['dispensa eletronica','Dispensa eletrônica'],['dispensa de licitacao','Dispensa de licitação'],['concorrencia','Concorrência'],['credenciamento','Credenciamento'],['inexigibilidade','Inexigibilidade'],['leilao','Leilão'],['dialogo competitivo','Diálogo competitivo']];
+const PORTAIS=[[/compras\.gov\.br|comprasnet|comprasgov/,'Compras.gov.br'],[/portal de compras publicas/,'Portal de Compras Públicas'],[/licitanet/,'Licitanet'],[/\bbll\b/,'BLL Compras'],[/licitacoes-e/,'Licitações-e'],[/\bbnc\b/,'BNC']];
+
+const SAMPLES=[
+{nome:'Pregão: material de limpeza',txt:()=>`PREFEITURA MUNICIPAL DE SÃO JOSÉ DAS PALMEIRAS (fictícia)
+PREGÃO ELETRÔNICO Nº 041/2026 - SISTEMA DE REGISTRO DE PREÇOS
+
+OBJETO: Registro de preços para aquisição de material de limpeza e higiene para as escolas da rede municipal de ensino.
+Valor estimado da contratação: R$ 58.430,00.
+Licitação exclusiva para participação de microempresas e empresas de pequeno porte, nos termos do art. 48, I, da Lei Complementar nº 123/2006.
+Pedidos de esclarecimento e impugnação até ${plus(6)}.
+Recebimento das propostas até ${plus(9)} às 08h00. Abertura da sessão pública: ${plus(9)} às 09h00, no Portal de Compras Públicas.
+HABILITAÇÃO: ato constitutivo ou CCMEI; prova de inscrição no CNPJ; certidão conjunta de débitos relativos a tributos federais e à dívida ativa da União; certificado de regularidade do FGTS (CRF); certidão negativa de débitos trabalhistas (CNDT); certidão de regularidade com a Fazenda Municipal.
+Prazo de entrega: até 10 (dez) dias após o recebimento da ordem de fornecimento.
+Pagamento em até 30 (trinta) dias após o atesto da nota fiscal.
+Multa de 0,5% por dia de atraso, limitada a 10 dias.`},
+{nome:'Dispensa: ar-condicionado',txt:()=>`MUNICÍPIO DE BOA VISTA DO SERTÃO (fictício) - SECRETARIA MUNICIPAL DE SAÚDE
+DISPENSA ELETRÔNICA Nº 017/2026
+
+Objeto: contratação de serviço de manutenção preventiva e corretiva de 24 aparelhos de ar-condicionado das unidades de saúde.
+Valor máximo aceitável: R$ 21.900,00.
+Período para envio de propostas: até ${plus(4)} às 10h00, pelo Compras.gov.br.
+Exigências: prova de inscrição no CNPJ; certidão de regularidade fiscal federal (Receita Federal e PGFN); regularidade do FGTS; certidão negativa de débitos trabalhistas; certidão de regularidade com a Fazenda Estadual; atestado de capacidade técnica comprovando serviço similar.
+Visita técnica facultativa, que poderá ser agendada até ${plus(2)}.
+Pagamento em até 45 (quarenta e cinco) dias após a execução do serviço.`},
+{nome:'Concorrência: reforma de UBS',txt:()=>`PREFEITURA MUNICIPAL DE LAGOA DOS IPÊS (fictícia)
+CONCORRÊNCIA ELETRÔNICA Nº 003/2026
+
+OBJETO: Reforma e ampliação da Unidade Básica de Saúde do distrito de Lagoa Seca, com fornecimento de material e mão de obra.
+Valor estimado da contratação: R$ 1.284.600,00.
+Abertura da sessão pública: ${plus(21)} às 09h00.
+Habilitação: contrato social; CNPJ; certidões de regularidade com as Fazendas federal, estadual e municipal; FGTS; CNDT; certidão negativa de falência; balanço patrimonial do último exercício; registro da empresa no CREA ou CAU; atestados de capacidade técnico-profissional e técnico-operacional.
+Visita técnica obrigatória, sob pena de inabilitação.
+Será exigida garantia contratual de 5% do valor do contrato.
+Prazo de execução: 180 (cento e oitenta) dias.
+Multa de 10% sobre o valor do contrato em caso de inexecução.`}
+];
+
+const norm=t=>{let o='';for(let i=0;i<t.length;i++){const n=t[i].normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();o+=n.length===1?n:(n[0]||' ')}return o};
+const excerpt=(T,i)=>{if(i<0)return'';const a=Math.max(0,i-140),b=Math.min(T.length,i+200);const s=T.slice(a,i),e=T.slice(i,b);const p=Math.max(s.lastIndexOf('. '),s.lastIndexOf('\n'),s.lastIndexOf('; '));const st=p>=0?a+p+1:a;const q=e.search(/[.;\n]/);const en=q>=0?i+q+1:b;return T.slice(st,en).replace(/\s+/g,' ').trim()};
+
+let cofre=store.get('pregao.cofre.v1',DOCS.filter(d=>d.def).map(d=>d.id));
+
+function analyze(T){
+  const N=norm(T);let m;
+  let mod=null,mi=1e9;for(const[k,v]of MODS){const i=N.indexOf(k);if(i>=0&&i<mi){mi=i;mod=v}}
+  const num=(m=/\bn\s*[º°o.]\s*(\d{1,5}\/\d{4})/.exec(N))?m[1]:'';
+  let orgao='Órgão não identificado';
+  if(m=/(prefeitura municipal de|munic[ií]pio de|c[aâ]mara municipal de|governo do estado d[eo]|secretaria (?:municipal|estadual) de)\s+([^\n,.;]{2,80})/i.exec(T))orgao=(m[1]+' '+m[2].split(/\s[-–—]\s/)[0]).trim();
+  let objeto='Objeto não identificado';
+  if(m=/\bobjeto\b[^:\n]{0,30}:\s*/.exec(N)){const st=m.index+m[0].length;const rest=T.slice(st,st+300);const q=rest.search(/\.\s|\n/);objeto=(q>0?rest.slice(0,q):rest).trim();objeto=objeto.charAt(0).toUpperCase()+objeto.slice(1)}
+  if(objeto.length>170)objeto=objeto.slice(0,167).trim()+'…';
+  const vals=[];const reV=/r\$\s*([\d.]+,\d{2})/g;while(m=reV.exec(N))vals.push({v:parseFloat(m[1].replace(/\./g,'').replace(',','.')),i:m.index});
+  const val=vals.find(x=>/valor (estimado|global|total|maximo|de referencia)/.test(N.slice(Math.max(0,x.i-80),x.i)))||vals.slice().sort((a,b)=>b.v-a.v)[0]||null;
+  const dates=[];const reD=/(\d{2})\/(\d{2})\/(\d{4})/g;
+  while(m=reD.exec(N)){const d=new Date(+m[3],+m[2]-1,+m[1]);if(isNaN(d))continue;const before=N.slice(Math.max(0,m.index-120),m.index).split(/[.;\n]/).pop();let tipo='Data citada';
+    if(/abertura|sessao publica|disputa/.test(before))tipo='Abertura da sessão';else if(/proposta/.test(before))tipo='Envio de propostas';else if(/impugna|esclarec/.test(before))tipo='Impugnação e esclarecimentos';else if(/visita/.test(before))tipo='Visita técnica';
+    dates.push({d,tipo,dias:Math.round((d-today)/DAY),i:m.index})}
+  const main=dates.filter(x=>x.tipo==='Envio de propostas'||x.tipo==='Abertura da sessão');const pool=main.length?main:dates;
+  const key=pool.slice().sort((a,b)=>a.d-b.d).find(x=>x.dias>=0)||pool.slice().sort((a,b)=>b.d-a.d)[0]||null;
+  const exclM=/exclusiv\w*[^.]{0,80}(microempresa|\bme\b|me\/epp|pequeno porte)|cota reservada/.exec(N);
+  const portal=(PORTAIS.find(([r])=>r.test(N))||[])[1]||'';
+  const req=DOCS.map(d=>{const r=d.re.exec(N);return r?{...d,i:r.index,tem:cofre.includes(d.id)}:null}).filter(Boolean);
+  const missing=req.filter(d=>!d.tem);
+  const risks=[];const add=(sev,title,tip,i)=>risks.push({sev,title,tip,i});
+  if(m=/visita tecnica/.exec(N)){const opt=/facultativ|opcional/.test(N.slice(m.index,m.index+90));add(opt?'baixo':'medio',opt?'Visita técnica facultativa':'Visita técnica obrigatória',opt?'Não é obrigatória, mas ajuda a orçar sem surpresas.':'Reserve tempo e deslocamento. Sem a visita, a empresa pode ser inabilitada.',m.index)}
+  if(m=/amostra/.exec(N))add('medio','Exige amostra do produto','Tenha o item pronto para entregar no prazo que o edital fixar.',m.index);
+  if(m=/garantia (contratual|de execucao|da proposta|de proposta)|caucao|seguro.garantia/.exec(N))add('alto','Exige garantia financeira','Caução, seguro-garantia ou fiança prendem dinheiro. Consulte o custo antes de entrar.',m.index);
+  let entrega=null;
+  if(m=/prazo (maximo )?(de|para) (entrega|inicio|execucao|fornecimento)[^.]{0,60}?(\d{1,3})\s*(\([^)]*\))?\s*(dias|horas)/.exec(N)){const n=+m[4],h=m[6]==='horas';entrega=`${n} ${m[6]}`;if((h&&n<=72)||(!h&&n<=5))add('medio',`Prazo curto: ${n} ${m[6]}`,'Confirme estoque ou equipe disponível antes de dar o lance.',m.index)}
+  let pagto=null;
+  if(m=/pagamento[^.]{0,80}?(\d{2,3})\s*(\([^)]*\))?\s*dias/.exec(N)){pagto=+m[1];if(pagto>30)add('baixo',`Pagamento em até ${pagto} dias`,'Você entrega antes de receber: planeje o caixa.',m.index)}
+  if(m=/multa[^.]{0,50}?(\d{1,2}(?:,\d+)?)\s*%/.exec(N)){const p=parseFloat(m[1].replace(',','.'));if(p>=10)add('medio',`Multa de ${m[1]}%`,'Atraso ou falha pode custar caro. Leia a cláusula de sanções.',m.index)}
+  if(m=/registro de precos/.exec(N))add('baixo','Ata de registro de preços','O órgão compra conforme a necessidade: a quantidade estimada não é garantida.',m.index);
+  if(val&&val.v>1e6)add('alto','Valor alto para pequeno negócio','Contratos grandes pedem capacidade financeira e equipe maiores.',val.i);
+  const closed=!!(key&&key.dias<0);
+  if(key&&key.dias>=0&&key.dias<3)add('medio',key.dias===0?'O prazo é hoje':`Faltam ${key.dias} dia${key.dias>1?'s':''}`,'Pouco tempo para juntar documentos e montar a proposta.',key.i);
+  const isDisp=!!(mod&&mod.startsWith('Dispensa'));
+  const pros=[];
+  if(exclM)pros.push({t:'Exclusiva para ME/EPP',d:'Você disputa só com empresas do seu porte.',i:exclM.index});
+  if(isDisp)pros.push({t:'Contratação por dispensa',d:'Processo mais curto e com menos etapas que um pregão.',i:mi});
+  if(val&&val.v<=LIM_HAB)pros.push({t:`Abaixo de ${brl(LIM_HAB)}`,d:'Até 1/4 do limite de dispensa, a habilitação pode ser dispensada, total ou parcialmente (Lei 14.133, art. 70, III).',i:val.i});
+  if(req.length&&!missing.length)pros.push({t:'Cofre completo',d:'Você já tem todos os documentos que o edital pede.',i:-1});
+  if(!exclM&&!isDisp&&mod&&val&&val.v<=LIM_EXCL)pros.push({t:'Confira a exclusividade',d:'Em regra, itens de até R$ 80 mil são exclusivos para ME/EPP (LC 123, art. 48, I). Veja se o edital justifica a exceção.',i:val.i});
+  let s=70;if(exclM)s+=12;if(isDisp)s+=6;if(mod==='Concorrência')s-=8;
+  missing.forEach(d=>s-=d.w);risks.forEach(r=>s-=W[r.sev]);
+  s=Math.max(0,Math.min(100,Math.round(s)));if(closed)s=Math.min(s,10);
+  const cls=closed?'off':s>=70?'ok':s>=45?'warn':'bad';
+  const verdict=closed?'Prazo encerrado':s>=70?'Vale a pena disputar':s>=45?'Avalie com cuidado':'Alto risco';
+  const why=closed?'O prazo principal deste edital já passou.':s>=70?'Poucos obstáculos para o seu perfil. Prepare a proposta.':s>=45?'Dá para participar, mas resolva os pontos abaixo antes.':'Muitas exigências para um pequeno negócio hoje.';
+  return{T,orgao,objeto,mod,num,val:val?val.v:null,dates,key,req,missing,risks,pros,s,cls,verdict,why,portal,entrega,pagto,closed};
+}
+
+const gauge=(s,cls)=>{const a=v=>{const t=Math.PI*(1-v/100);return[(110+90*Math.cos(t)).toFixed(1),(112-90*Math.sin(t)).toFixed(1)]};const[x1,y1]=a(45),[x2,y2]=a(70);
+  return `<svg class="gauge ${cls}" viewBox="0 0 220 136" role="img" aria-label="Pontuação ${s} de 100"><path class="trk" d="M20 112A90 90 0 0 1 200 112" fill="none" stroke-width="20" stroke-linecap="round"/><path class="arc" d="M20 112A90 90 0 0 1 200 112" fill="none" stroke-width="20" stroke-linecap="round" pathLength="100" stroke-dasharray="100" stroke-dashoffset="${100-s}"/><circle cx="${x1}" cy="${y1}" r="3" fill="var(--panel)"/><circle cx="${x2}" cy="${y2}" r="3" fill="var(--panel)"/><text x="110" y="104" text-anchor="middle" font-size="54" font-weight="900">${s}</text><text class="sub" x="110" y="130" text-anchor="middle">de 100 pontos</text></svg>`};
+const item=(c,t,d,q,pill)=>`<li class="it ${c}"><details><summary><b>${esc(t)}</b><span>${esc(d)}</span>${pill?`<i class="pill" style="font-style:normal">${esc(pill)}</i>`:''}${q?'<em>Ver trecho do edital</em>':''}</summary>${q?`<blockquote>“${esc(q)}”</blockquote>`:''}</details></li>`;
+let last=null;
+function render(r,animate){
+  const el=$('#resultado');
+  if(!r){el.innerHTML='<p class="err">Cole o texto de um edital para analisar.</p>';return}
+  const k=r.key;
+  el.innerHTML=`<div class="strip"><span>${esc(r.mod||'Modalidade não identificada')}${r.num?' nº '+esc(r.num):''}</span><span>Analisado pelo Pregão em ${fmtD(new Date())}</span></div>
+  <div class="paper">
+  <p class="org">${esc(r.orgao)}</p><h2 class="obj">${esc(r.objeto)}</h2>
+  <div class="meter">${gauge(r.s,r.cls)}<div><div class="stamp ${r.cls}${animate?' pop':''}">${r.verdict}</div><p class="why">${r.why}</p></div></div>
+  <dl class="facts"><div><dt>Valor</dt><dd class="nw">${brl(r.val)}</dd></div><div><dt>${k?esc(k.tipo):'Próximo prazo'}</dt><dd>${k?`<span class="nw">${fmtD(k.d)}</span>`:'Não achado'}</dd></div><div><dt>Tempo</dt><dd class="nw">${k?emDias(k.dias):'—'}</dd></div><div><dt>Documentos</dt><dd class="nw">${r.req.length-r.missing.length} de ${r.req.length}</dd></div></dl>
+  <h3 class="sec">Falta no seu cofre <span class="cnt">${r.missing.length}</span></h3>${r.missing.length?`<ul class="items">${r.missing.map(d=>item('bad',d.label,'Providencie antes do prazo ou marque no cofre se já tiver.',excerpt(r.T,d.i))).join('')}</ul>`:'<p class="empty">Nada faltando entre os documentos identificados.</p>'}
+  <h3 class="sec">Pontos de atenção <span class="cnt">${r.risks.length}</span></h3>${r.risks.length?`<ul class="items">${r.risks.map(x=>item(SEVC[x.sev],x.title,x.tip,excerpt(r.T,x.i),SEVL[x.sev])).join('')}</ul>`:'<p class="empty">Nenhuma armadilha comum encontrada.</p>'}
+  ${r.pros.length?`<h3 class="sec">A favor <span class="cnt">${r.pros.length}</span></h3><ul class="items">${r.pros.map(p=>item('plain',p.t,p.d,excerpt(r.T,p.i))).join('')}</ul>`:''}
+  ${r.dates.length?`<details class="dates" style="margin-top:14px"><summary>Ver as ${r.dates.length} datas encontradas no edital</summary><div class="scroll"><table><thead><tr><th>Data</th><th>Tipo</th><th class="r">Situação</th></tr></thead><tbody>${r.dates.map(x=>`<tr><td class="nw">${fmtD(x.d)}</td><td>${esc(x.tipo)}</td><td class="r nw">${emDias(x.dias)}</td></tr>`).join('')}</tbody></table></div></details>`:''}
+  </div>`;
+  renderRoute(r);resetChat(r);
+}
+
+function renderRoute(r){
+  const k=r.key;const miss=r.missing.length;
+  const steps=[
+    {t:'Cadastre-se no portal',d:r.portal?`Este edital roda no ${r.portal}. O cadastro é feito uma vez e vale para as próximas.`:'Descubra no edital em qual portal acontece a disputa e faça o cadastro da empresa.',st:'',p:'Uma vez só'},
+    {t:'Junte os documentos',d:miss?`Faltam ${miss}: ${r.missing.map(x=>x.label).join(', ')}.`:r.req.length?'Seu cofre já cobre o que o edital pede. Confira as validades.':'Nenhum documento identificado no texto. Leia a seção de habilitação.',st:miss?'warn':'ok',p:miss?`Faltam ${miss}`:'Pronto'},
+    {t:'Monte a proposta',d:r.val!=null?`Calcule seu custo e margem. O valor de referência é ${brl(r.val)}: acima dele a proposta é recusada.`:'Calcule seu custo, impostos e margem antes de definir o preço.',st:'',p:'Seu preço'},
+    {t:'Envie até o prazo',d:k?`${k.tipo}: ${fmtD(k.d)} (${emDias(k.dias)}).`:'Confira a data de envio das propostas no edital.',st:r.closed?'bad':k&&k.dias<3?'warn':k?'ok':'',p:k?emDias(k.dias):'Ver edital'},
+    {t:'Dispute e entregue',d:r.entrega?`Depois de vencer, o prazo é de ${r.entrega}.`:'Depois de vencer, siga o prazo de entrega ou execução do edital.',st:'',p:r.entrega||'Ver edital'},
+    {t:'Emita a nota e receba',d:r.pagto?`O pagamento sai em até ${r.pagto} dias após o atesto.`:'Emita a nota fiscal e acompanhe o atesto e o pagamento.',st:r.pagto>30?'warn':'',p:r.pagto?`${r.pagto} dias`:'Após atesto'}
+  ];
+  $('#route').innerHTML=steps.map((x,i)=>`<li><span class="dot ${x.st}">${x.st==='ok'?'✓':i+1}</span><div><h3>${esc(x.t)}</h3><p>${esc(x.d)}</p></div><i class="pill ${x.st||'off'}" style="font-style:normal">${esc(x.p)}</i></li>`).join('');
+}
+
+let chatR=null;
+const clock=()=>{const d=new Date();return d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})};
+const bubble=(who,html)=>{const m=$('#msgs');m.insertAdjacentHTML('beforeend',`<div class="bub ${who}">${html}<time>${clock()}</time></div>`);m.scrollTop=m.scrollHeight};
+function resetChat(r){
+  chatR=r;$('#msgs').innerHTML='<div class="day">Hoje</div>';
+  const k=r.key;
+  bubble('b',`<strong>Novo edital para o seu ramo</strong>\n${esc(r.orgao)}\n${esc(r.objeto)}\n\nValor: ${esc(brl(r.val))}\nPrazo: ${k?esc(fmtD(k.d))+' ('+esc(emDias(k.dias))+')':'confira no edital'}\nPontuação: <strong>${r.s}/100, ${esc(r.verdict.toLowerCase())}</strong>\n${r.missing.length?`Faltam ${r.missing.length} documento${r.missing.length>1?'s':''} no seu cofre.`:'Seu cofre tem tudo o que o edital pede.'}`);
+  $('#qr').hidden=false;
+}
+$('#qr').addEventListener('click',e=>{const b=e.target.closest('[data-q]');if(!b||!chatR)return;const r=chatR,q=b.dataset.q;bubble('u',esc(b.textContent));
+  setTimeout(()=>{
+    if(q==='sim'){const k=r.key;bubble('b',`<strong>Combinado!</strong> Próximos passos:\n${r.missing.length?r.missing.map((d,i)=>`${i+1}. Providenciar ${esc(d.label)}`).join('\n')+'\n':''}${r.missing.length+1}. Montar a proposta${r.val!=null?' abaixo de '+esc(brl(r.val)):''}\n${r.missing.length+2}. Enviar ${k&&k.dias>=0?'até '+esc(fmtD(k.d)):'no prazo do edital'}\n\nVou te lembrar 2 dias antes do prazo.`)}
+    else if(q==='resumo'){bubble('b',r.risks.length?`<strong>Pontos de atenção</strong>\n${r.risks.map(x=>'• '+esc(x.title)).join('\n')}`:'Nenhuma armadilha comum encontrada neste edital.')}
+    else{bubble('b','Tudo bem. Vou continuar procurando editais do seu ramo e te aviso quando aparecer outro.')}
+  },450)});
+
+let hist=store.get('pregao.hist.v1',null);
+const toRow=(r,ex)=>({id:Date.now()+Math.random(),data:new Date().toISOString(),orgao:r.orgao,objeto:r.objeto,mod:r.mod||'Não identificada',val:r.val,s:r.s,cls:r.cls,verdict:r.verdict,ex:!!ex});
+if(hist===null){hist=[SAMPLES[2],SAMPLES[1]].map(x=>toRow(analyze(x.txt()),true));store.set('pregao.hist.v1',hist)}
+function renderHist(){
+  $('#hist tbody').innerHTML=hist.length?hist.map(h=>`<tr><td class="nw">${esc(new Date(h.data).toLocaleDateString('pt-BR'))}</td><td><b>${esc(h.objeto)}</b><br><span class="muted">${esc(h.orgao)}</span>${h.ex?'<span class="badge">exemplo</span>':''}</td><td>${esc(h.mod)}</td><td class="r nw">${esc(brl(h.val))}</td><td><span class="mini ${esc(h.cls)}"><span><i style="width:${+h.s||0}%"></i></span>${+h.s||0}</span></td><td><span class="vpill ${esc(h.cls)}">${esc(h.verdict)}</span></td><td><button type="button" class="x" data-del="${h.id}" aria-label="Remover análise">Remover</button></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Nenhuma análise salva. Clique em “Analisar e salvar”.</td></tr>';
+}
+$('#hist').addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b)return;hist=hist.filter(h=>String(h.id)!==b.dataset.del);store.set('pregao.hist.v1',hist);renderHist()});
+let armed=false;
+$('#limparHist').addEventListener('click',e=>{const b=e.currentTarget;if(!armed){armed=true;b.textContent='Confirmar limpeza';setTimeout(()=>{armed=false;b.textContent='Limpar histórico'},4000);return}armed=false;b.textContent='Limpar histórico';hist=[];store.set('pregao.hist.v1',hist);renderHist();$('#histStatus').textContent='Histórico apagado.'});
+const copy=(txt,st,ok)=>{try{navigator.clipboard.writeText(txt).then(()=>st.textContent=ok,()=>st.textContent='Não foi possível copiar neste navegador.')}catch(e){st.textContent='Não foi possível copiar neste navegador.'}};
+$('#copiarHist').addEventListener('click',()=>{const lines=[['Data','Órgão','Objeto','Modalidade','Valor','Pontuação','Veredito'].join('\t'),...hist.map(h=>[new Date(h.data).toLocaleDateString('pt-BR'),h.orgao,h.objeto,h.mod,h.val==null?'':h.val.toFixed(2).replace('.',','),h.s,h.verdict].join('\t'))];copy(lines.join('\n'),$('#histStatus'),'Copiado. Cole numa planilha ou no relatório.')});
+
+$('#cofre').innerHTML=DOCS.map(d=>`<label><input type="checkbox" id="c-${d.id}" value="${d.id}"${cofre.includes(d.id)?' checked':''}>${esc(d.label)}</label>`).join('');
+$('#cofre').addEventListener('change',()=>{cofre=[...document.querySelectorAll('#cofre input:checked')].map(i=>i.value);store.set('pregao.cofre.v1',cofre);if(last){last=analyze(last.T);render(last,false)}});
+
+const markPreset=i=>document.querySelectorAll('#presets button').forEach((b,j)=>b.classList.toggle('on',j===i));
+$('#presets').innerHTML=SAMPLES.map((x,i)=>`<button type="button" data-s="${i}">${esc(x.nome)}</button>`).join('');
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(!b)return;const i=+b.dataset.s;$('#edital').value=SAMPLES[i].txt();markPreset(i);last=analyze($('#edital').value);render(last,true);$('#status').textContent='Exemplo fictício carregado. Clique em “Analisar e salvar” para guardar no histórico.'});
+$('#edital').addEventListener('input',()=>markPreset(-1));
+$('#analisar').addEventListener('click',()=>{const T=$('#edital').value.trim();if(T.length<40){render(null);$('#status').textContent='O texto parece curto demais para ser um edital.';return}last=analyze(T);render(last,true);hist.unshift(toRow(last,false));store.set('pregao.hist.v1',hist);renderHist();$('#status').textContent='Análise salva no histórico.';if(innerWidth<=900)$('#resultado').scrollIntoView({behavior:'smooth'})});
+$('#limparTexto').addEventListener('click',()=>{$('#edital').value='';markPreset(-1);$('#edital').focus();$('#status').textContent=''});
+$('#arquivo').addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const rd=new FileReader();rd.onload=()=>{$('#edital').value=String(rd.result);markPreset(-1);$('#status').textContent=`Arquivo “${f.name}” carregado. Clique em “Analisar e salvar”.`};rd.readAsText(f);e.target.value=''});
+
+let fbs=store.get('pregao.fb.v1',[]);
+$('#fbNota').innerHTML=[1,2,3,4,5].map(n=>`<label><input type="radio" name="fbNota" value="${n}" required>${n}</label>`).join('');
+function renderFb(){
+  const n=fbs.length;$('#dots').innerHTML=[0,1,2].map(i=>`<i class="${i<n?'on':''}"></i>`).join('')+`<span>${n} de 3 testes${n?` · nota média ${(fbs.reduce((a,f)=>a+f.nota,0)/n).toFixed(1).replace('.',',')}`:''}</span>`;
+  $('#fbTab tbody').innerHTML=n?fbs.map(f=>`<tr><td><b>${esc(f.nome)}</b></td><td>${esc(f.perfil)}</td><td class="r">${+f.nota}</td><td>${esc(f.ent)}</td><td>${esc(f.com||'Sem comentário')}</td><td><button type="button" class="x" data-fd="${f.id}" aria-label="Remover teste">Remover</button></td></tr>`).join(''):'<tr><td colspan="6" class="empty">Nenhum teste registrado ainda. A atividade pede pelo menos 3 usuários reais.</td></tr>';
+}
+$('#fb').addEventListener('submit',e=>{e.preventDefault();const f=e.target;fbs.push({id:Date.now(),nome:$('#fbNome').value.trim(),perfil:$('#fbPerfil').value,nota:+f.fbNota.value,ent:f.fbEnt.value,com:$('#fbCom').value.trim()});store.set('pregao.fb.v1',fbs);f.reset();renderFb();$('#fbStatus').textContent='Teste registrado.'});
+$('#fbTab').addEventListener('click',e=>{const b=e.target.closest('[data-fd]');if(!b)return;fbs=fbs.filter(f=>String(f.id)!==b.dataset.fd);store.set('pregao.fb.v1',fbs);renderFb()});
+$('#copiarFb').addEventListener('click',()=>{const t=fbs.map((f,i)=>`Teste ${i+1}: ${f.nome} (${f.perfil}) - nota ${f.nota}/5 - entendeu sem ajuda: ${f.ent}${f.com?' - "'+f.com+'"':''}`).join('\n')||'Nenhum teste registrado.';copy(t,$('#fbStatus'),'Resultados copiados para o relatório.')});
+
+$('#edital').value=SAMPLES[0].txt();markPreset(0);
+last=analyze($('#edital').value);render(last,false);renderHist();renderFb();
+$('#status').textContent='Exemplo fictício já analisado. Troque o texto ou escolha outro exemplo.';
+}
+</script>
+</body>
+</html>
